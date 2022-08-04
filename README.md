@@ -1,7 +1,8 @@
 docker build -t gnosischain/prysm:latest --build-arg UPSTREAM_VERSION=v2.1.2 .
-docker push gnosischain/prysm:latest   
+docker push gnosischain/prysm:latest
 
-# Starting the container in beacon mode 
+# Starting the container in beacon mode
+
 ```
 --chain-config-file="/custom_config_data/config.yaml"
 --genesis-state="/custom_config_data/genesis.ssz"
@@ -10,6 +11,7 @@ docker push gnosischain/prysm:latest
 ```
 
 # Starting the container in validator mode
+
 ```
 --chain-config-file="/custom_config_data/config.yaml"
 ```
