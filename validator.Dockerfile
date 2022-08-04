@@ -6,7 +6,7 @@ COPY chiado/genesis.ssz /usr/genesis.ssz
 
 
 ENTRYPOINT [ \
-      "beacon-chain", \
+      "validator-chain", \
       "--datadir=/data", \
       "--rpc-host=0.0.0.0", \
       "--grpc-gateway-host=0.0.0.0", \
