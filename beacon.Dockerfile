@@ -4,7 +4,6 @@ FROM ghcr.io/gnosischain/gbc-prysm-beacon-chain:${UPSTREAM_VERSION}
 COPY chiado/config.yaml /usr/config.yaml
 COPY chiado/genesis.ssz /usr/genesis.ssz
 
-
 ENTRYPOINT [ \
   "/app/cmd/beacon-chain/beacon-chain", \
   "--chain-config-file=/usr/config.yaml", \

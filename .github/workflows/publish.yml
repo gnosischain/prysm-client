@@ -35,13 +35,19 @@ jobs:
       # {upstream_image}{testnet}{version_upstream}
       - run: >
           docker build .
-          --tag gnosischain/prysm-beacon:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
           --build-arg UPSTREAM_VERSION=${{ env.UPSTREAM_VERSION }}
+          --tag gnosischain/prysm-beacon:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
+          --tag gnosischain/prysm-beacon:latest-${{ env.NETWORK }}
           -f beacon.Dockerfile
       - run: >
           docker build .
-          --tag gnosischain/prysm-validator:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
           --build-arg UPSTREAM_VERSION=${{ env.UPSTREAM_VERSION }}
+          --tag gnosischain/prysm-validator:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
+          --tag gnosischain/prysm-validator:latest-${{ env.NETWORK }}
           -f validator.Dockerfile
-      - run: docker push gnosischain/prysm-beacon:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
-      - run: docker push gnosischain/prysm-validator:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
+
+      - run: >
+          docker push gnosischain/prysm-beacon:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
+          docker push gnosischain/prysm-beacon:latest-${{ env.NETWORK }}
+          docker push gnosischain/prysm-validator:${{ env.UPSTREAM_VERSION }}-${{ env.NETWORK }}
+          docker push gnosischain/prysm-validator:latest-${{ env.NETWORK }}
