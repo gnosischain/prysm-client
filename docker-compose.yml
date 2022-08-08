@@ -1,0 +1,60 @@
+version: "3"
+services:
+  consensus:
+    image: gnosischain/prysm-beacon:latest-chiado
+    restart: always
+    stop_grace_period: 1m
+    volumes:
+      - consensus-data:/var/lib/consensus
+      - ./jwtsecret:/jwtsecret
+    ports:
+      - 9000:9000/tcp
+      - 9000:9000/udp
+    command: >
+      --accept-terms-of-use=true
+      --jwt-secret /jwtsecret
+      --http-web3provider http://execution:8551
+      --datadir /var/lib/data
+      --rpc-host=0.0.0.0
+      --rpc-port=4000
+      --p2p-udp-port=9000
+      --p2p-tcp-port=9000
+
+  validator:
+    image: gnosischain/prysm-validator:latest-chiado
+    restart: always
+    volumes:
+      - ./validator-data:/var/lib/validator-data
+    command: >
+      --accept-terms-of-use=true
+      --suggested-fee-recipient ${FEE_RECIPIENT}
+      --graffiti ${GRAFFITI}
+      --beacon-rpc-provider consensus:4000
+      --datadir /var/lib/data
+      --wallet-dir /var/lib/validator-data/wallet
+      --wallet-password-file /var/lib/validator-data/wallet-pass.txt
+
+  execution:
+    image: gnosischain/nethermind:latest-chiado
+    restart: always
+    stop_grace_period: 1m
+    volumes:
+      - execution-data:/var/lib/execution
+      - ./jwtsecret:/jwtsecret
+    ports:
+      - 30303:30303/tcp
+      - 30303:30303/udp
+    command: >
+      --JsonRpc.JwtSecretFile=/jwtsecret
+      --JsonRpc.AdditionalRpcUrls="http://localhost:8551|http;ws|net;eth;subscribe;engine;web3;client"
+      --JsonRpc.Enabled=true
+      --JsonRpc.EnabledModules="net,eth,consensus,subscribe,web3,admin,txpool"
+      --JsonRpc.Host=0.0.0.0
+      --datadir=/var/lib/execution
+      --Network.DiscoveryPort=30303
+      --Network.P2PPort=30303
+
+volumes:
+  consensus-data:
+  validator-data:
+  execution-data:

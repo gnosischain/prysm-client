@@ -1,72 +1,51 @@
 # Prysm Client - Docker
 
-This projects builds a customized version of the prysm client with Gnosischain modifications.
+This projects builds a customized version of the prysm client with Gnosischain modifications. Those include the integrations with different testnets.
 
-Those include the integrations with different testnets.
+- [gnosischain/prysm-beacon](https://hub.docker.com/repository/docker/gnosischain/prysm-beacon)
+- [gnosischain/prysm-validator](https://hub.docker.com/repository/docker/gnosischain/prysm-validator)
 
-## Image tagging 
-
-Images are referenced under the following pattern. 
-
-```
-gnosischain/{client_provider}-{node_type}:{upstream_version}-{testnet}
-```
-
-i.e.
+Images are referenced under the following pattern `gnosischain/{client_provider}-{node_type}:{upstream_version}-{testnet}` for example
 
 ```
-docker pull gnosischain/prysm-validator:v2.1.2-gbc-chiado 
+docker pull gnosischain/prysm-beacon:latest-chiado
 ```
 
-We provide prysm as validator and beacon. 
+## Prysm reference
 
+- General https://docs.prylabs.network/docs/getting-started
+- CLI Reference https://docs.prylabs.network/docs/prysm-usage/parameters
 
-## Dockerhub 
+# Starting Prysm in Chiado testnet
 
-[Beacon image](https://hub.docker.com/repository/docker/gnosischain/prysm-beacon)  
-
-[Validator image](https://hub.docker.com/repository/docker/gnosischain/prysm-validator)
-
-
-## More information on how the prysm client works and can be customized can be found here:  
-
-General  
-https://docs.prylabs.network/docs/getting-started
-
-CLI Reference  
-https://docs.prylabs.network/docs/prysm-usage/parameters
-
-
-# Starting prysm in beacon mode
-As an example we can run with version v.2.1.2-gbc in testnet chiado as beacon: 
+1. Add an `.env` file with your fee recepient and graffiti
 
 ```
-docker pull gnosischain/prysm-validator:v2.1.2-gbc-chiado  
-docker run gnosischain/prysm-validator:v2.1.2-gbc-chiado 
+FEE_RECIPIENT=0x0000000000000000000000000000000000000000
+GRAFFITI=gnosischain/prysm
 ```
 
-Customization through flags: 
-```
-docker run gnosischain/prysm-validator:v2.1.2-gbc-chiado --enable-db-backup-webhook
-```
-
-# Starting prysm in validator mode
-
-As an example we can run with version v2.1.2-gbc in testnet chiado as validator:
+2. Add your keystores in `./keystores` and their password in a file `./keystores/password.txt` to get this file structure:
 
 ```
-docker pull gnosischain/prysm-validator:v2.1.2-gbc-chiado  
-docker run gnosischain/prysm-validator:v2.1.2-gbc-chiado
-
+.
+├── docker-compose.yml
+├── .env
+├── jwtsecret
+└── keystores/
+    ├── keystore-001.json
+    ├── keystore-002.json
+    └── password.txt
 ```
 
-Customization through flags: 
-
-
-```
-docker run gnosischain/prysm-validator:v2.1.2-gbc-chiado --enable-db-backup-webhook
+3. Run `./setup.sh` to create a new `./jwtsecret` token + import your validators.
 
 ```
+./setup.sh
+```
 
+4. Start `docker-compose.yml` services from this repository
 
-
+```
+docker-compose up -d
+```
