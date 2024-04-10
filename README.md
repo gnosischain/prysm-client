@@ -1,3 +1,7 @@
+# DEPRECATED
+> [!WARNING]  
+> This repository is no longer supported. Please use the [official documentation](https://docs.gnosischain.com/node/manual/).
+
 # Prysm Client - Docker
 
 This projects builds a customized version of the prysm client with Gnosischain modifications. Those include the integrations with different testnets.
